@@ -1,3 +1,5 @@
+package tests.Day_03;
+
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
@@ -39,7 +41,7 @@ public class ArabamComTest {
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
-        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,"PIXEL");
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,"Pixel 2");
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME,"Android");
         capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION,"10.0");
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,"UiAutomator2");
@@ -53,7 +55,7 @@ public class ArabamComTest {
     }
 
     @Test
-    public void arabamTest(){
+    public void arabamTest() throws InterruptedException {
 
         // Uygulamanin basarili bir sekilde yuklendigi dogrulanir
         Assert.assertTrue(driver.isAppInstalled("com.dogan.arabam"));
@@ -71,9 +73,9 @@ public class ArabamComTest {
 
         // Wolkswagen markasini secelim
         TouchAction touchAction = new TouchAction<>(driver);
-        touchAction.press(PointOption.point(549,2089))
-                         .waitAction(WaitOptions.waitOptions(Duration.ofMillis(500)))
-                         .moveTo(PointOption.point(524,816)).release().perform();
+        touchAction.press(PointOption.point(531,1669))
+                         .waitAction(WaitOptions.waitOptions(Duration.ofMillis(400)))
+                         .moveTo(PointOption.point(531,465)).release().perform();
         driver.findElementByXPath("//*[@text='Volkswagen']").click();
 
         // yil secimi yapalim
@@ -92,21 +94,48 @@ public class ArabamComTest {
         driver.findElementByXPath("//*[@text='Yarı Otomatik']").click();
 
         // Versiyon secimi yapalim
-        touchAction.press(PointOption.point(460,1650)).release().perform();
+        Thread.sleep(2000);
+        touchAction.press(PointOption.point(160,1353)).release().perform();
 
-        // aracin km bilgilerini girelim
+        // aracin km bilgilerini girelim ve devam tusuna basalim
         if (driver.isKeyboardShown()){
             driver.getKeyboard().pressKey("50000");
         } else {
             driver.findElementById("com.dogan.arabam:id/et_km").sendKeys("50000");
         }
+        driver.findElementByXPath("//*[@text='Devam']").click();
 
         // aracin rengini secelim
-        // opsiyel donanim (varsa) seecelim
-        // degisen bilgisi ekleyerek tramer kaydi belirtelim
-        // aracimizin fiyatinin 500.000 tl den fazla oldugunu test edelim
-        // uygulamayi kapatalim
+        Thread.sleep(2000);
+        touchAction.press(PointOption.point(535,1775))
+                         .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300)))
+                         .moveTo(PointOption.point(495,20))
+                         .release()
+                         .perform();
+        driver.findElementByXPath("//*[@text='Yeşil (metalik)']").click();
 
+        // opsiyel donanim (varsa) seecelim
+        // sectigimiz aracta olmadıgı icin bos kaldi bu bolum
+
+        // degisen bilgisi ekleyerek tramer kaydi belirtelim
+        driver.findElementById("com.dogan.arabam:id/iv_B01101").click();
+        driver.findElementByXPath("(//*[@text='Boyalı'])[2]").click();
+        driver.findElementById("com.dogan.arabam:id/iv_B01201").click();
+        driver.findElementByXPath("(//*[@text='Boyalı'])[2]").click();
+        driver.findElementByXPath("//*[@text='Devam']").click();
+
+        // tramer kaydi secimini yapalim
+        driver.findElementById("com.dogan.arabam:id/rbHasNoTramerEntry").click();
+        driver.findElementById("com.dogan.arabam:id/btnNext").click();
+
+        // aracimizin fiyatinin 500.000 tl den fazla oldugunu test edelim
+        String fiyat = driver.findElementById("com.dogan.arabam:id/tvAveragePrice").getText();
+        fiyat = fiyat.replaceAll("\\D","");
+        System.out.println(fiyat);
+
+        Assert.assertTrue(Integer.parseInt(fiyat)>500000);
+        // uygulamayi kapatalim
+        driver.closeApp();
 
     }
 

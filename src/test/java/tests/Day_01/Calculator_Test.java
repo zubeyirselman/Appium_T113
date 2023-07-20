@@ -1,3 +1,5 @@
+package tests.Day_01;
+
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
@@ -26,7 +28,7 @@ public class Calculator_Test {
         // Kullanici gerekli kurulumlari yapar
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
-        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,"PIXEL");
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,"Pixel 2");
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME,"Android");
         capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION,"10.0");
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,"UiAutomator2");
